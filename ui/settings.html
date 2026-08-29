@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings — Oryn</title>
+<style>
+:root{--ink:#473b3d;--muted:#8d7b7e;--paper:#fdf6f6;--card:#fff;--line:#ead9d9;--accent:#bd7d89;--accent-soft:#f5e8e8}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,var(--paper),#fff 70%);color:var(--ink);font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.page{width:min(820px,calc(100% - 42px));margin:auto;padding:40px 0 70px}.eyebrow{color:#a85a40;font-size:10px;font-weight:800;letter-spacing:1.5px}.header{display:flex;justify-content:space-between;align-items:end;margin-bottom:28px}.header h1{font:46px Georgia,serif;margin:10px 0 0}.save-state{color:var(--muted);font-size:12px}.group{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:14px 0;overflow:hidden;box-shadow:0 5px 20px #9f788012}.group h2{font-size:13px;margin:0;padding:17px 20px;background:#fffafa;border-bottom:1px solid #f2e7e7}.row{min-height:66px;padding:15px 20px;display:flex;gap:22px;align-items:center;justify-content:space-between;border-bottom:1px solid #f3eaea}.row:last-child{border-bottom:0}.copy{flex:1}.copy b{font-size:14px;font-weight:650}.copy small{display:block;color:var(--muted);margin-top:5px;line-height:1.4}.control{flex:none}.toggle{appearance:none;width:42px;height:25px;border-radius:20px;background:#dfd2d3;position:relative;cursor:pointer;transition:.2s}.toggle:before{content:"";position:absolute;width:19px;height:19px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #5d4c4d44;transition:.2s}.toggle:checked{background:var(--accent)}.toggle:checked:before{transform:translateX(17px)}select,input[type=text]{border:1px solid #ddc8ca;border-radius:9px;padding:9px 11px;background:#fff;color:var(--ink);font:inherit;outline:none}select:focus,input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px #bd7d8922}.path{width:245px}.danger{margin-top:26px;padding:18px 20px;border:1px solid #edcccc;border-radius:15px;background:#fff7f7;display:flex;align-items:center;justify-content:space-between;gap:15px}.danger b{font-size:13px}.danger small{display:block;color:var(--muted);margin-top:5px}.clear{border:1px solid #d5a6aa;border-radius:9px;background:#fff;color:#a45f69;padding:9px 13px;cursor:pointer;white-space:nowrap}.clear:hover{background:#f9e9e9}.tab-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}@media(max-width:600px){.page{width:calc(100% - 28px);padding-top:28px}.header h1{font-size:38px}.row{align-items:flex-start}.control{margin-top:4px}.path{width:170px}}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="header"><div><span class="eyebrow">ORYN / PREFERENCES</span><h1>Settings</h1></div><span id="status" class="save-state">Loading…</span></header>
+  <section class="group"><h2>Privacy & security</h2>
+    <div class="row"><div class="copy"><b>Ad and tracker blocking</b><small>Oryn does not inject its own blocker. Use a trusted browser extension for this feature.</small></div><span class="save-state">Extension-based</span></div>
+    <div class="row"><div class="copy"><b>Clear history on exit</b><small>Remove saved browsing history whenever Oryn closes.</small></div><input class="control toggle" id="clearExit" type="checkbox"></div>
+  </section>
+  <section class="group"><h2>Browsing</h2>
+    <div class="row"><div class="copy"><b>Restore tabs on startup</b><small>Keep this preference ready for the next session.</small></div><input class="control toggle" id="restoreTabs" type="checkbox"></div>
+    <div class="row"><div class="copy"><b>Search engine</b><small>Used for normal text searches. You can switch providers if one applies rate limits.</small></div><select class="control" id="search"><option value="google">Google</option><option value="duckduckgo">DuckDuckGo</option><option value="bing">Bing</option><option value="brave">Brave Search</option><option value="custom">Custom</option></select></div>
+    <div class="row" id="custom-search-row"><div class="copy"><b>Custom search URL</b><small>Use `{query}` where the encoded search text should go.</small></div><input class="control path" id="customSearch" type="text" placeholder="https://example.com/search?q={query}"></div>
+  </section>
+  <section class="group"><h2>Appearance & downloads</h2>
+    <div class="row"><div class="copy"><b>Browser theme</b><small>Choose the surface used by Oryn's internal pages.</small></div><select class="control" id="theme"><option value="light">Light</option><option value="dark">Dark</option><option value="system">System</option></select></div>
+    <div class="row"><div class="copy"><b>New-tab wallpaper</b><small>Choose a scalable, high-resolution Oryn wallpaper.</small></div><select class="control" id="wallpaper"><option value="aurora">Aurora glow</option><option value="dawn">Soft dawn</option><option value="rose">Rose haze</option><option value="ocean">Quiet ocean</option><option value="midnight">Midnight aurora</option></select></div>
+    <div class="row"><div class="copy"><b>Smooth entrance animations</b><small>Gently reveal the Oryn mark, search box, and shortcuts when a new tab opens.</small></div><input class="control toggle" id="animations" type="checkbox"></div>
+    <div class="row"><div class="copy"><b>New-tab layout</b><small>Choose a tighter workspace or a more spacious presentation.</small></div><select class="control" id="density"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
+    <div class="row"><div class="copy"><b>Download folder</b><small>Optional absolute folder path. Leave empty for the system default.</small></div><input class="control path" id="downloads" type="text" placeholder="System default"></div>
+  </section>
+  <section class="group"><h2>Extensions</h2>
+    <div class="row"><div class="copy"><b>Ad and privacy extensions</b><small>Install trusted unpacked Chromium extensions. Oryn never installs extensions silently.</small></div><button class="clear control" id="installExtension">Add extension</button></div>
+    <div id="extensions"></div>
+  </section>
+  <section class="group"><h2>Tab management</h2>
+    <div class="row"><div class="copy"><b>Active tab actions</b><small>Manage the currently selected tab without opening another menu.</small></div><div class="control tab-actions"><button class="clear" id="pinTab">Pin / unpin</button><button class="clear" id="duplicateTab">Duplicate</button><button class="clear" id="closeOthers">Close others</button></div></div>
+  </section>
+  <section class="danger"><div><b>Clear browsing data</b><small>Delete saved history, cookies, cache, and local site storage.</small></div><button class="clear" id="clearData">Clear data</button></section>
+</main>
+<script>
+const $=id=>document.getElementById(id), status=$('status');
+let settings={};
+function showSaved(){status.textContent='Saved';clearTimeout(showSaved.timer);showSaved.timer=setTimeout(()=>status.textContent='',1200)}
+function updateCustom(){document.querySelector('#custom-search-row').style.display=$('search').value==='custom'?'flex':'none'}
+function save(){window.oryn.saveSettings({clearOnExit:$('clearExit').checked,restoreTabs:$('restoreTabs').checked,defaultSearch:$('search').value,customSearchUrl:$('customSearch').value,theme:$('theme').value,wallpaper:$('wallpaper').value,enableAnimations:$('animations').checked,layoutDensity:$('density').value,downloadsDirectory:$('downloads').value}).then(v=>{settings=v;showSaved()})}
+window.oryn.getSettings().then(v=>{settings=v;$('clearExit').checked=!!v.clearOnExit;$('restoreTabs').checked=!!v.restoreTabs;$('search').value=v.defaultSearch||'google';$('customSearch').value=v.customSearchUrl||'https://www.google.com/search?q={query}';updateCustom();$('theme').value=['light','dark','system'].includes(v.theme)?v.theme:'system';$('wallpaper').value=v.wallpaper||'aurora';$('animations').checked=v.enableAnimations!==false;$('density').value=v.layoutDensity||'comfortable';$('downloads').value=v.downloadsDirectory||'';status.textContent=''});
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('change',save));$('search').addEventListener('change',updateCustom);
+$('downloads').addEventListener('blur',save);
+async function activeId(){const tabs=await window.oryn.state();return tabs.find(t=>t.active)?.id}
+$('pinTab').onclick=async()=>{const id=await activeId();if(id){await window.oryn.pinTab(id);status.textContent='Tab updated'}};
+$('duplicateTab').onclick=async()=>{const id=await activeId();if(id){await window.oryn.duplicateTab(id);status.textContent='Tab duplicated'}};
+$('closeOthers').onclick=async()=>{const id=await activeId();if(id){await window.oryn.closeOtherTabs(id);status.textContent='Other tabs closed'}};
+function renderExtensions(items){const root=$('extensions');root.innerHTML=items.length?items.map(x=>`<div class="row"><div class="copy"><b>${x.name||'Extension'}</b><small>Version ${x.version||'unknown'}</small></div><button class="clear control" data-remove-extension="${x.id}">Remove</button></div>`).join(''):'<div class="row"><small class="save-state">No extensions installed.</small></div>'}
+window.oryn.getExtensions().then(renderExtensions);
+$('installExtension').onclick=async()=>{const result=await window.oryn.installExtension();if(result){renderExtensions(result);status.textContent='Extension added'}};
+$('extensions').onclick=async e=>{const button=e.target.closest('[data-remove-extension]');if(!button)return;const result=await window.oryn.removeExtension(button.dataset.removeExtension);renderExtensions(result);status.textContent='Extension removed'};
+$('clearData').addEventListener('click',async()=>{if(!confirm('Clear history, cookies, cache, and local site storage?'))return;$('clearData').disabled=true;await window.oryn.clearBrowsingData();$('clearData').disabled=false;status.textContent='Browsing data cleared';});
+</script>
+</body>
+</html>
