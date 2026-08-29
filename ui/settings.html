@@ -15,6 +15,7 @@
   <section class="group"><h2>Privacy & security</h2>
     <div class="row"><div class="copy"><b>Ad and tracker blocking</b><small>Oryn does not inject its own blocker. Use a trusted browser extension for this feature.</small></div><span class="save-state">Extension-based</span></div>
     <div class="row"><div class="copy"><b>Clear history on exit</b><small>Remove saved browsing history whenever Oryn closes.</small></div><input class="control toggle" id="clearExit" type="checkbox"></div>
+    <div class="row"><div class="copy"><b>Private tabs</b><small>Private tabs use an isolated session, do not save Oryn history, and clear cookies, cache, and local storage when closed. Websites and network providers can still observe activity while a page is open.</small></div><span class="save-state">Session only</span></div>
   </section>
   <section class="group"><h2>Browsing</h2>
     <div class="row"><div class="copy"><b>Restore tabs on startup</b><small>Keep this preference ready for the next session.</small></div><input class="control toggle" id="restoreTabs" type="checkbox"></div>
@@ -29,7 +30,7 @@
     <div class="row"><div class="copy"><b>Download folder</b><small>Optional absolute folder path. Leave empty for the system default.</small></div><input class="control path" id="downloads" type="text" placeholder="System default"></div>
   </section>
   <section class="group"><h2>Extensions</h2>
-    <div class="row"><div class="copy"><b>Ad and privacy extensions</b><small>Install trusted unpacked Chromium extensions. Oryn never installs extensions silently.</small></div><button class="clear control" id="installExtension">Add extension</button></div>
+    <div class="row"><div class="copy"><b>Ad and privacy extensions</b><small>Add a trusted unpacked Chromium extension folder containing manifest.json. Chrome Web Store links and .crx files are not direct installs yet.</small></div><button class="clear control" id="installExtension">Add unpacked extension</button></div>
     <div id="extensions"></div>
   </section>
   <section class="group"><h2>Tab management</h2>
@@ -51,9 +52,9 @@ $('pinTab').onclick=async()=>{const id=await activeId();if(id){await window.oryn
 $('duplicateTab').onclick=async()=>{const id=await activeId();if(id){await window.oryn.duplicateTab(id);status.textContent='Tab duplicated'}};
 $('closeOthers').onclick=async()=>{const id=await activeId();if(id){await window.oryn.closeOtherTabs(id);status.textContent='Other tabs closed'}};
 function renderExtensions(items){const root=$('extensions');root.innerHTML=items.length?items.map(x=>`<div class="row"><div class="copy"><b>${x.name||'Extension'}</b><small>Version ${x.version||'unknown'}</small></div><button class="clear control" data-remove-extension="${x.id}">Remove</button></div>`).join(''):'<div class="row"><small class="save-state">No extensions installed.</small></div>'}
-window.oryn.getExtensions().then(renderExtensions);
-$('installExtension').onclick=async()=>{const result=await window.oryn.installExtension();if(result){renderExtensions(result);status.textContent='Extension added'}};
-$('extensions').onclick=async e=>{const button=e.target.closest('[data-remove-extension]');if(!button)return;const result=await window.oryn.removeExtension(button.dataset.removeExtension);renderExtensions(result);status.textContent='Extension removed'};
+window.oryn.getExtensions().then(v=>renderExtensions(Array.isArray(v)?v:[])).catch(()=>renderExtensions([]));
+$('installExtension').onclick=async()=>{const result=await window.oryn.installExtension();const items=result?.extensions||[];renderExtensions(items);status.textContent=result?.ok?'Extension added':(result?.error||'Extension could not be added')};
+$('extensions').onclick=async e=>{const button=e.target.closest('[data-remove-extension]');if(!button)return;const result=await window.oryn.removeExtension(button.dataset.removeExtension);renderExtensions(result?.extensions||[]);status.textContent=result?.ok?'Extension removed':(result?.error||'Extension could not be removed')};
 $('clearData').addEventListener('click',async()=>{if(!confirm('Clear history, cookies, cache, and local site storage?'))return;$('clearData').disabled=true;await window.oryn.clearBrowsingData();$('clearData').disabled=false;status.textContent='Browsing data cleared';});
 </script>
 </body>
