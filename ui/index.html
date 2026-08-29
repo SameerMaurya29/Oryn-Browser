@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Oryn</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <header class="top">
+        <div class="tab-row">
+            <div id="tabs"></div>
+            <button id="new" class="new" title="New tab">＋</button>
+            <div class="chrome-actions"><button id="history" title="History">◷</button><button id="downloads" type="button" title="Downloads" aria-label="Downloads">↓</button><button id="settings" title="Settings">⚙</button></div>
+        </div>
+        <div class="nav-row">
+            <button id="back" aria-label="Back">←</button>
+            <button id="forward" aria-label="Forward">→</button>
+            <button id="reload" aria-label="Reload">↻</button>
+            <form id="form" class="address"><span>◇</span><input id="url" placeholder="Search or enter URL..."><button id="bookmark" type="button" title="Bookmark this page">☆</button></form>
+            <span id="page-context">New Tab</span>
+        </div>
+    </header>
+
+
+    <div id="quick-url" class="quick-url hidden"><span>◇</span><input id="quick-url-input" placeholder="Search privately or type a URL"><small>Esc to close</small></div>
+    <div id="popover" class="popover hidden" role="dialog" aria-live="polite"></div>
+    <script src="app.js"></script>
+</body>
+</html>
