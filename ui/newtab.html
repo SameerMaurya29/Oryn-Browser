@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>New Tab — Oryn</title>
+    <style>
+        :root {
+            --ink: #182326;
+            --blue: #69a9d6;
+            --line: #dce7eb;
+            --muted: #8b9aa0;
+            --paper: #f7fafb;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #eef7fb 0%, #fff 63%, #f4fafc 100%);
+            color: var(--ink);
+            font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            display: grid;
+            place-items: center;
+        }
+        .page {
+            width: min(900px, 88vw);
+            text-align: center;
+            margin-top: -7vh;
+        }
+        .mark {
+            width: 66px;
+            height: 66px;
+            margin: 0 auto 24px;
+            border-radius: 22px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(145deg, #dcecf7, #82b5d7 44%, #efc477 72%, #df755d);
+            color: #fff;
+            font-size: 31px;
+            box-shadow: 0 10px 28px #6d9fba38;
+        }
+        .eyebrow {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.7px;
+            color: #a85a40;
+        }
+        .title {
+            font: 56px Georgia, serif;
+            letter-spacing: -2.5px;
+            margin: 16px 0 8px;
+        }
+        .title span { color: var(--blue); }
+        .subtitle {
+            font: 18px Georgia, serif;
+            color: #91a0a6;
+            margin: 0;
+        }
+        .prompt {
+            width: 100%;
+            min-height: 168px;
+            margin: 38px auto 14px;
+            background: #fff;
+            border: 1px solid #dce7eb;
+            border-radius: 20px;
+            box-shadow: 0 12px 34px #55798716;
+            text-align: left;
+            padding: 22px 24px 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .prompt textarea {
+            width: 100%;
+            flex: 1;
+            min-height: 112px;
+            resize: none;
+            border: 0;
+            outline: 0;
+            color: var(--ink);
+            font: 20px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .prompt textarea::placeholder { color: #a4b0b5; }
+        .prompt:focus-within { border-color: #d7a8b0; box-shadow: 0 0 0 3px #efd7da, 0 12px 34px #c9959d24; }
+        .prompt-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .hint {
+            color: #9ba6aa;
+            font-size: 11px;
+        }
+        .search-btn {
+            border: 0;
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            background: var(--blue);
+            color: white;
+            font-size: 21px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px #69a9d655;
+        }
+        .search-btn:hover { background: #4e91c1; }
+        .shortcuts {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 35px;
+        }
+        .shortcut {
+            min-width: 120px;
+            padding: 14px 16px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            color: #52636a;
+            text-decoration: none;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .shortcut:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px #55798718;
+        }
+        .shortcut b {
+            display: block;
+            color: var(--blue);
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+        .privacy {
+            margin-top: 30px;
+            color: #9aa6a9;
+            font-size: 11px;
+        }
+        body.wallpaper-dawn { background: radial-gradient(circle at 50% 18%, #fff8dc 0, transparent 32%), linear-gradient(145deg,#fff1d8,#fff 62%,#f8e5d2); }
+        body.wallpaper-rose { background: radial-gradient(circle at 72% 20%, #f7c9d2 0, transparent 34%), linear-gradient(145deg,#fff2f5,#fff 60%,#f5e1e7); }
+        body.wallpaper-ocean { background: radial-gradient(circle at 25% 15%, #c8e8f4 0, transparent 34%), linear-gradient(145deg,#e8f7fb,#fff 62%,#dfeff5); }
+        body.wallpaper-midnight { color:#f4eef1; background: radial-gradient(circle at 50% 10%,#587799 0,transparent 34%), linear-gradient(145deg,#283747,#536579 60%,#d18c86); }
+        body.wallpaper-midnight .subtitle,body.wallpaper-midnight .privacy { color:#e4dce0; }
+        body.wallpaper-midnight .prompt,body.wallpaper-midnight .shortcut { background:#fffdfd;color:#182326; }
+        body.layout-compact .page { margin-top:-4vh; }
+        body.layout-compact .mark { width:54px; height:54px; margin-bottom:16px; }
+        body.layout-compact .title { font-size:48px; margin:10px 0 5px; }
+        body.layout-compact .subtitle { font-size:16px; }
+        body.layout-compact .prompt { min-height:164px; margin-top:26px; }
+        body.layout-compact .shortcuts { margin-top:22px; }
+        body.layout-compact .privacy { margin-top:18px; }
+        @keyframes oryn-rise { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes oryn-glow { from { opacity:0; transform:scale(.92); } to { opacity:1; transform:scale(1); } }
+        body.animated .mark { animation:oryn-glow .7s cubic-bezier(.2,.8,.2,1) both; }
+        body.animated .eyebrow { animation:oryn-rise .55s .12s ease-out both; }
+        body.animated .title { animation:oryn-rise .6s .18s ease-out both; }
+        body.animated .subtitle { animation:oryn-rise .6s .24s ease-out both; }
+        body.animated .prompt { animation:oryn-rise .65s .3s ease-out both; }
+        body.animated .shortcut { animation:oryn-rise .55s calc(.38s + var(--delay, 0s)) ease-out both; }
+        body:not(.animated) * { animation:none!important; transition:none!important; }
+        @media(prefers-reduced-motion:reduce) { body.animated * { animation:none!important; } }
+        @media(max-width: 650px) {
+            .page { width: 90vw; }
+            .title { font-size: 41px; }
+            .prompt { min-height: 190px; padding: 18px; }
+            .prompt textarea { font-size: 17px; }
+            .shortcuts { flex-wrap: wrap; }
+            .shortcut { min-width: 100px; }
+        }
+    </style>
+</head>
+<body class="wallpaper-aurora animated">
+    <main class="page">
+        <div class="mark"><img src="assets/oryn-logo.svg" alt="Oryn"></div>
+        <div class="eyebrow">A QUIETER WAY TO BROWSE</div>
+        <h1 class="title">Welcome to <span>Oryn</span></h1>
+        <p class="subtitle">A clean, private browser for everyday browsing.</p>
+        
+        <form class="prompt" id="search-form">
+            <textarea id="query" autofocus placeholder="Search or enter URL..."></textarea>
+            <div class="prompt-bottom">
+                <span class="hint">Press Enter to search · Shift + Enter for a new line</span>
+                <button class="search-btn" type="submit" aria-label="Search">↗</button>
+            </div>
+        </form>
+
+        <div class="shortcuts">
+            <a class="shortcut" href="https://www.google.com/"><b>G</b>Google</a>
+            <a class="shortcut" href="https://www.youtube.com/"><b>▶</b>YouTube</a>
+            <a class="shortcut" href="https://www.google.com/gmail/"><b>✉</b>Mail</a>
+        </div>
+
+        <div class="privacy">Oryn keeps the browser interface simple and puts you in control.</div>
+    </main>
+
+    <script>
+        const form = document.querySelector('#search-form');
+        const box = document.querySelector('#query');
+        if (window.oryn?.getSettings) window.oryn.getSettings().then(s => { document.body.className = 'wallpaper-' + (s.wallpaper || 'aurora') + ' layout-' + (s.layoutDensity || 'comfortable') + (s.enableAnimations === false ? '' : ' animated'); });
+
+        function search() {
+            const q = box.value.trim();
+            if (q) {
+                if (window.oryn?.navigate) window.oryn.navigate(q); else location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
+            }
+        }
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            search();
+        });
+
+        box.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                search();
+            }
+        });
+
+        document.querySelectorAll('.shortcut').forEach(a => 
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                location.href = a.href;
+            })
+        );
+    </script>
+</body>
+</html>
