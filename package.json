@@ -1,6 +1,6 @@
 {
   "name": "oryn-browser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A quiet, privacy-respecting browser for everyday browsing.",
   "main": "src/main.js",
   "author": "Oryn",
@@ -10,9 +10,9 @@
     "lint": "node --check src/main.js && node --check src/preload.js && node --check ui/app.js",
     "test": "node --test tests/smoke.test.js",
     "icons": "node scripts/generate-icons.js",
-    "dist:mac": "npm run icons && electron-builder --mac dmg --arm64",
-    "dist:win": "npm run icons && electron-builder --win nsis --x64",
-    "dist:linux": "npm run icons && electron-builder --linux AppImage deb --x64",
+    "dist:mac": "npm run icons && electron-builder --mac dmg --arm64 --publish never",
+    "dist:win": "npm run icons && electron-builder --win nsis --x64 --publish never",
+    "dist:linux": "npm run icons && electron-builder --linux AppImage deb --x64 --publish never",
     "dist": "npm run dist:mac && npm run dist:win && npm run dist:linux"
   },
   "devDependencies": {
