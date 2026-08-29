@@ -24,6 +24,10 @@ test('download actions stay local to Electron shell handlers', () => {
     assert.match(main, /shell\.openPath/);
     assert.match(main, /shell\.showItemInFolder/);
     assert.match(main, /download-action/);
+    assert.match(main, /wireDownloadSession/);
+    assert.match(main, /app\.getPath\('downloads'\)/);
+    assert.match(main, /clearPrivateSession/);
+    assert.match(main, /clearStorageData/);
     assert.doesNotMatch(main, /new BrowserWindow\([^)]*download/i);
 });
 
@@ -46,9 +50,22 @@ test('preload remains isolated and remote pages do not receive the bridge', () =
 test('removed legacy UI and startup regressions are absent', () => {
     const main = read('src/main.js');
     const app = read('ui/app.js');
+    const settings = read('ui/settings.html');
     assert.match(main, /require\('node:crypto'\)/);
+    assert.match(main, /disableHardwareAcceleration/);
+    assert.match(main, /disable-gpu-compositing/);
+    assert.match(main, /ERR_ABORTED/);
     assert.doesNotMatch(main, /closePanel/);
     assert.doesNotMatch(main, /search\.tiekoetter|SearXNG/);
     assert.doesNotMatch(app, /google\.com\/s2\/favicons/);
+    assert.match(main, /manifest\.json/);
+    assert.match(main, /chrome_url_overrides/);
+    assert.match(main, /loadExtensionNewTab/);
+    assert.match(main, /isChromeWebStoreUrl/);
+    assert.match(main, /oryn:\/\/extensions/);
+    assert.match(settings, /result\?\.error/);
+    assert.match(settings, /Private tabs/);
+    assert.match(read('ui/index.html'), /id="private-new"/);
+    assert.match(app, /private-mode/);
     assert.doesNotMatch(read('ui/index.html'), /workspace-pill|class="apps"|edge-trigger/);
 });
