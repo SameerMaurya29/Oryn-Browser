@@ -1,0 +1,14 @@
+cask "oryn" do
+  version "0.1.0"
+
+  on_arm do
+    url "https://github.com/SameerMaurya29/Oryn-Browser/releases/download/v#{version}/Oryn-#{version}-arm64.dmg"
+    sha256 "REPLACE_WITH_RELEASE_SHA256"
+  end
+
+  name "Oryn"
+  desc "A calm, privacy-focused Electron browser"
+  homepage "https://github.com/SameerMaurya29/Oryn-Browser"
+
+  app "Oryn.app"
+end
