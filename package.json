@@ -1,9 +1,12 @@
 {
   "name": "oryn-browser",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A quiet, privacy-respecting browser for everyday browsing.",
   "main": "src/main.js",
-  "author": "Oryn",
+  "author": {
+    "name": "Oryn",
+    "email": "smaurya290807@gmail.com"
+  },
   "license": "MIT",
   "scripts": {
     "start": "electron .",
@@ -13,7 +16,13 @@
     "dist:mac": "npm run icons && electron-builder --mac dmg --arm64 --publish never",
     "dist:win": "npm run icons && electron-builder --win nsis --x64 --publish never",
     "dist:linux": "npm run icons && electron-builder --linux AppImage deb --x64 --publish never",
-    "dist": "npm run dist:mac && npm run dist:win && npm run dist:linux"
+    "dist": "npm run dist:mac && npm run dist:win && npm run dist:linux",
+    "dist:mac-arm64": "npm run icons && electron-builder --mac dmg --arm64 --publish never",
+    "dist:mac-x64": "npm run icons && electron-builder --mac dmg --x64 --publish never",
+    "dist:win-x64": "npm run icons && electron-builder --win nsis --x64 --publish never",
+    "dist:win-arm64": "npm run icons && electron-builder --win nsis --arm64 --publish never",
+    "dist:linux-x64": "npm run icons && electron-builder --linux AppImage deb --x64 --publish never",
+    "dist:linux-arm64": "npm run icons && electron-builder --linux AppImage deb --arm64 --publish never"
   },
   "devDependencies": {
     "electron": "^44.0.0",
@@ -46,6 +55,14 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
+    },
+    "linux": {
+      "category": "Utility",
+      "desktopName": "oryn",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
     }
   }
 }
