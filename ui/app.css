@@ -121,6 +121,10 @@ button { cursor: pointer; }
 .nav-row > button:active,
 .new:active { background: #ead4d6; }
 .new { font-size: 22px; }
+.private-new { font-size: 15px; color: var(--accent); }
+.private-new:hover { color: var(--ink); }
+body.private-mode .top { background: #f8eef1; }
+body.private-mode .private-new { background: #ead4d6; color: #8e5361; }
 
 .chrome-actions {
     position: relative;
@@ -146,6 +150,10 @@ button { cursor: pointer; }
     font-size: 16px;
 }
 .chrome-actions button:hover { background: var(--surface-soft); }
+#downloads { position: relative; }
+.download-glyph { display: inline-block; }
+#download-badge { position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: #c78691; box-shadow: 0 0 0 2px var(--paper); animation: download-pulse 1.3s ease-in-out infinite; }
+@keyframes download-pulse { 50% { transform: scale(1.35); opacity: .55; } }
 
 .address {
     height: 34px;
