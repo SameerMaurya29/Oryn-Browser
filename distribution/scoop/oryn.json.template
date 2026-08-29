@@ -1,0 +1,28 @@
+{
+  "version": "0.1.0",
+  "description": "A calm, privacy-focused Electron browser",
+  "homepage": "https://github.com/SameerMaurya29/Oryn-Browser",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/SameerMaurya29/Oryn-Browser/releases/download/v0.1.0/Oryn%20Setup%200.1.0.exe",
+      "hash": "REPLACE_WITH_RELEASE_SHA256"
+    }
+  },
+  "installer": {
+    "args": ["/S"]
+  },
+  "shortcuts": [
+    ["Oryn.exe", "Oryn"]
+  ],
+  "checkver": {
+    "github": "https://github.com/SameerMaurya29/Oryn-Browser"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/SameerMaurya29/Oryn-Browser/releases/download/v$version/Oryn%20Setup%20$version.exe"
+      }
+    }
+  }
+}
