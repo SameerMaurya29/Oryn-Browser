@@ -1,0 +1,7 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Search — Oryn</title>
+<script>
+    const q = new URLSearchParams(location.search).get('q') || '';
+    location.replace(q ? 'https://www.google.com/search?q=' + encodeURIComponent(q) : 'https://www.google.com/');
+</script>
