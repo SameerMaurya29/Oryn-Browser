@@ -8,8 +8,11 @@ window.oryn.getSettings().then(applyTheme); window.oryn.onSettings(applyTheme);
 function faviconFor(t){return typeof t?.favicon==='string' ? t.favicon : ''}
 function render() {
     const active = activeTab();
+    const privateMode = Boolean(active?.private);
+    document.body.classList.toggle('private-mode', privateMode);
     $('#url').value = active?.url || '';
-    $('#page-context').textContent = active?.title || 'New Tab';
+    $('#url').placeholder = privateMode ? 'Private tab · Search or enter URL...' : 'Search or enter URL...';
+    $('#page-context').textContent = `${privateMode ? 'Private · ' : ''}${active?.title || 'New Tab'}`;
     const marked = Boolean(active?.url && bookmarks.some(b => b.url === active.url));
     $('#bookmark').textContent = marked ? '★' : '☆';
     $('#bookmark').title = marked ? 'Remove bookmark' : 'Bookmark this page';
@@ -17,19 +20,26 @@ function render() {
 }
 function closePopover(){ $('#popover').classList.add('hidden'); $('#popover').innerHTML=''; }
 function showBookmarks(){ closePopover(); }
+function updateDownloadIndicator(items=downloads){
+    const badge=$('#download-badge');
+    if (!badge) return;
+    const activeDownload=items.some(d=>['started','progressing','paused'].includes(d.state));
+    badge.classList.toggle('hidden', !activeDownload);
+}
 async function showDownloads(){
-    const panel=$('#popover'); downloads=await window.oryn.getDownloads();
+    const panel=$('#popover'); downloads=await window.oryn.getDownloads(); updateDownloadIndicator();
     panel.className='popover downloads-popover';
-    panel.innerHTML='<div class="popover-head"><b>Downloads</b><button id="local-popover-close" aria-label="Close downloads">×</button></div><div class="popover-body">'+(downloads.length?downloads.slice(0,12).map(d=>`<div class="popover-item download-item"><span class="download-name"><b>${esc(d.filename)}</b><small>${esc(d.state)}${d.total?` · ${Math.round((d.received||0)/d.total*100)}%`:''}</small></span>${d.state==='started'||d.state==='progressing'||d.state==='paused'?`<span class="download-actions"><button class="mini" data-download-action="${esc(d.id)}" data-action="${d.state==='paused'?'resume':'pause'}">${d.state==='paused'?'Resume':'Pause'}</button><button class="mini" data-download-action="${esc(d.id)}" data-action="cancel">Cancel</button></span>`:d.path?`<span class="download-actions"><button class="mini" data-reveal-download="${esc(d.id)}">Show</button><button class="mini" data-open-download="${esc(d.id)}">Open</button></span>`:''}</div>`).join(''):'<p class="empty">Your downloaded files will appear here.</p>')+'</div>';
+    panel.innerHTML='<div class="popover-head"><b>Downloads</b><button id="local-popover-close" aria-label="Close downloads">×</button></div><div class="popover-body">'+(downloads.length?downloads.slice(0,12).map(d=>`<div class="popover-item download-item"><span class="download-name"><b>${esc(d.filename)}</b><small>${d.private?'Private · ':''}${esc(d.state)}${d.total?` · ${Math.round((d.received||0)/d.total*100)}%`:''}</small></span>${d.state==='started'||d.state==='progressing'||d.state==='paused'?`<span class="download-actions"><button class="mini" data-download-action="${esc(d.id)}" data-action="${d.state==='paused'?'resume':'pause'}">${d.state==='paused'?'Resume':'Pause'}</button><button class="mini" data-download-action="${esc(d.id)}" data-action="cancel">Cancel</button></span>`:d.path?`<span class="download-actions"><button class="mini" data-reveal-download="${esc(d.id)}">Show</button><button class="mini" data-open-download="${esc(d.id)}">Open</button></span>`:''}</div>`).join(''):'<p class="empty">Your downloaded files will appear here.</p>')+'</div>';
     panel.classList.remove('hidden'); $('#local-popover-close').onclick=closePopover;
     panel.onclick=e=>{const action=e.target.closest('[data-download-action]');if(action){window.oryn.downloadAction(action.dataset.downloadAction,action.dataset.action);return}const reveal=e.target.closest('[data-reveal-download]');if(reveal)window.oryn.revealDownload(reveal.dataset.revealDownload);const open=e.target.closest('[data-open-download]');if(open)window.oryn.openDownload(open.dataset.openDownload)};
 }
 window.oryn.onState(s => { tabs=s; render(); });
 window.oryn.state().then(s => { tabs=s; render(); });
 window.oryn.getBookmarks().then(v => { bookmarks=v; render(); });
-window.oryn.getDownloads().then(v => { downloads=Array.isArray(v)?v:[]; });
-window.oryn.onDownloads(v => { downloads=Array.isArray(v)?v:[]; if (!$('#popover').classList.contains('hidden')) showDownloads(); });
+window.oryn.getDownloads().then(v => { downloads=Array.isArray(v)?v:[]; updateDownloadIndicator(); });
+window.oryn.onDownloads(v => { downloads=Array.isArray(v)?v:[]; updateDownloadIndicator(); if (!$('#popover').classList.contains('hidden')) showDownloads(); });
 $('#new').onclick = () => { closePopover(); window.oryn.newTab(); };
+$('#private-new').onclick = () => { closePopover(); window.oryn.newPrivateTab(); };
 $('#back').onclick = () => window.oryn.back(); $('#forward').onclick = () => window.oryn.forward(); $('#reload').onclick = () => window.oryn.reload();
 $('#tabs').onclick = e => { const c=e.target.closest('[data-close]'); if(c){e.stopPropagation();return window.oryn.close(c.dataset.close)} const t=e.target.closest('[data-id]'); if(t) window.oryn.activate(t.dataset.id); };
 $('#tabs').addEventListener('dragstart', e => { const t=e.target.closest('[data-id]'); if(t) e.dataTransfer.setData('text/plain',t.dataset.id); });
